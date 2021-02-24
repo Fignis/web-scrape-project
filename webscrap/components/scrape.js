@@ -1,18 +1,12 @@
 import axios from "axios";
 import cheerio from "cheerio";
 
-const getHtml = async (searchTerm) => {
-  //this is the first page of the search term, we dont know the max number of pages per result of search term.
-  const url = `https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1311&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_pgn=1`;
-  //so we need to get the number of the next page which is done by this regular expression.
-  //im not quite familiar with regular expressions however, what this does it gets the last portion of the url which contains the page number
-  //it turns the string into a number value with the parseInt function
-  //then it adds one to the value that was extracted.
-  const numberOfNextPage = parseInt(url.match(/pgn=(\d+)$/)[1], 10) + 1;
-  //after the numberOfNextPage is retrieved, concatenate it into the url to retrieve the next page of the search results.
-  const nextPage = `https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1311&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_pgn=${numberOfNextPage}`;
-  console.log(nextPage);
+let numberOfMappedResults = 0;
 
+const getHtml = async (
+  searchTerm,
+  url = `https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1311&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_pgn=1`
+) => {
   try {
     //get the response from the search url
     const { data } = await axios.get(url, {
@@ -65,9 +59,12 @@ const formatResults = async (data) => {
       const elementselect = $(ele);
       return getEbayPrices(elementselect);
     })
+    //after mapping the results to a new array.
+    //get() gets the array from the cheerio object it extracts it.
     .get();
-
-  return JSON.stringify(mapResults);
+  const numberOfResults = mapResults.length - 1;
+  numberOfMappedResults = numberOfResults;
+  return `${numberOfResults}, ${JSON.stringify(mapResults, null, 2)}`;
 };
 const getClHtml = async (searchTerm) => {
   try {
@@ -77,6 +74,27 @@ const getClHtml = async (searchTerm) => {
     return data;
   } catch (err) {
     console.log(`error:${response.err}`);
+  }
+};
+const scrapperEbay = async (searchTerm) => {
+  getHtml(searchTerm);
+  const displayedResults = formatResults(getHtml(searchTerm));
+  if (numberOfMappedResults < 1) {
+    //in order to view the actual data we need to convert the array to a string and return it.
+    return displayedResults;
+  }
+  {
+    let url = `https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1311&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_pgn=1`;
+    //so we need to get the number of the next page which is done by this regular expression.
+    //im not quite familiar with regular expressions however, what this does it gets the last portion of the url which contains the page number
+    //it turns the string into a number value with the parseInt function
+    //then it adds one to the value that was extracted.
+    const numberOfNextPage = parseInt(url.match(/pgn=(\d+)$/)[1], 10) + 1;
+    //after the numberOfNextPage is retrieved, concatenate it into the url to retrieve the next page of the search results.
+    const nextPage = `https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1311&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_pgn=${numberOfNextPage}`;
+    const nextPageDat = getHtml(searchTerm, nextPage);
+    console.log(nextPage);
+    return formatResults(nextPageDat);
   }
 };
 /*const getClprices = ($) => {
@@ -92,4 +110,4 @@ const getClHtml = async (searchTerm) => {
   return indvidFbSearchRes;
 };
 */
-export { getHtml, getEbayPrices, formatResults, getClHtml };
+export { scrapperEbay };
