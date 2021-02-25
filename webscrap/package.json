@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node -r esm index.js"
+    "dev": "node -r esm index.js",
+    "debug": "node --inspect-brk index.js"
   },
   "author": "",
   "license": "ISC",
