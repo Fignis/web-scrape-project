@@ -1,7 +1,4 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
@@ -11,22 +8,26 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "type": "pwa-node"
-            ,
+            "type": "pwa-node",
             "address": "localhost",
             "restart": false,
             "sourceMaps": false,
-            "outDir": null,
+            
             "localRoot": "${workspaceRoot}",
             "remoteRoot": null
         },
-
         {
             "type": "pwa-chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:8080",
             "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "pwa-node",
+            "name": "Run Current File",
+            "request": "launch",
+            "program": "${workspaceFolder}\\components\\scrape.js"
         }
     ]
 }
