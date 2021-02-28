@@ -61,8 +61,8 @@ const formatResults = (data) => {
   //get() gets the array from the cheerio object it extracts it.
   const numberOfResults = mapResults.length - 1;
   const cheerioConvertedRes = mapResults.get();
-
-  return cheerioConvertedRes;
+  return mapResults.get();
+  // return cheerioConvertedRes;
 };
 
 // const getNumberOfResults = (cheerioConvertedRes) => {
@@ -81,31 +81,37 @@ const getClHtml = async (searchTerm) => {
   }
 };
 */
+
 const scrapperEbay = async (
   searchTerm,
-  newUrl = `https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1311&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_pgn=13`
+  newUrl = `https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1311&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_pgn=1`
 ) => {
   try {
     // const url = `https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1311&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_pgn=1`;
     //fetch data with inputed searchterm
     const htmlData = await getHtml(newUrl);
     //format the data
-    const displayedResults = await formatResults(htmlData);
-
+    const displayedResults = formatResults(htmlData);
+    const numberOfAllResults = +displayedResults.length;
+    console.log(numberOfAllResults);
     //recursion:
     //when to stop the recursion
-    if (displayedResults.length === 0) {
+    if (displayedResults.length < 1) {
       //if the number of results on page is equal to 0 stop and return displayedResults
       console.log(`inital/terminate ${displayedResults.length}`);
-      return displayedResults;
     } else {
       //cut the page number off the link and convert to an int
       const numberOfNextPage = parseInt(newUrl.match(/pgn=(\d+)$/)[1], 10) + 1;
       //make a new link with the new page number
       const nextPage = `https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1311&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_pgn=${numberOfNextPage}`;
       //add the next page results to current page results.
-      console.log(nextPage);
-      return displayedResults.concat(await scrapperEbay(searchTerm, nextPage));
+
+      console.log(
+        displayedResults.concat(await scrapperEbay(searchTerm, nextPage))
+      );
+      /* console.log(
+        displayedResults.concat(await scrapperEbay(searchTerm, nextPage))
+      );*/
     }
   } catch (err) {
     console.log(err);
