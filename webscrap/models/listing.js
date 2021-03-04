@@ -7,20 +7,24 @@ const listingSchema = new schema({
   title: {
     type: String,
     requried: true,
-    unique: true,
   },
   subtitle: {
     type: String,
     required: true,
-    unique: true,
   },
   price: {
     type: Number,
     required: true,
   },
-  shipping: {
+  shippingInfo: {
     type: String,
     required: true,
   },
+  link: {
+    type: String,
+    required: true,
+    unique: true,
+  },
 });
-export { listing };
+var Listing = mongoose.model("listing", listingSchema);
+export { Listing };

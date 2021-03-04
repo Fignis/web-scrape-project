@@ -53,14 +53,13 @@ const formatResults = (data) => {
     "ul[class='srp-results srp-list clearfix']> li[class='s-item    s-item--watch-at-corner']"
   );
   const mapResults = results.map((index, ele) => {
-    const elementselect = $(ele);
-    return getEbayPrices(elementselect);
+    // const elementselect = ;
+    return getEbayPrices($(ele));
   });
 
   //after mapping the results to a new array.
   //get() gets the array from the cheerio object it extracts it.
-  const numberOfResults = mapResults.length - 1;
-  const cheerioConvertedRes = mapResults.get();
+
   return mapResults.get();
   // return cheerioConvertedRes;
 };

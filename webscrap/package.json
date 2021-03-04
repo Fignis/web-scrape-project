@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node -r esm index.js",
+    "start":"nodemon -r esm index.js",
     "debug": "nodemon -r esm --inspect index.js"
   },
   "author": "Fignis",

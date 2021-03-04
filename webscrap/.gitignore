@@ -1,0 +1,7 @@
+.env
+.env.example
+.env.local
+.env.staging
+
+# Dependency directories
+node_modules/
