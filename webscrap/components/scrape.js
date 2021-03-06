@@ -80,7 +80,7 @@ const scrapperEbay = async (
   /*A temporary fix I will limit the number of results 3/5/21 */
 
   const numberOfCurrentPg = parseInt(newUrl.match(/pgn=(\d+)$/)[1], 10);
-  if (numberOfCurrentPg === 3) {
+  if (numberOfCurrentPg >= 2) {
     /*----update 3/5/21 ----*/
     //to limit number of results I've implemented a page cap because it does not make sense to get all the results from a search for this project.
 

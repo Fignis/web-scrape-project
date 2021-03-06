@@ -4,21 +4,19 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { Listing } from "./models/listing";
 import mongoose from "mongoose";
-import path, { format } from "path";
+import path from "path";
 require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
 const app = express();
 const port = process.env.PORT_NUM || 7640;
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
-app.get("/scrape", async (req, res, next) => {
+
+app.get("/scrape", async () => {
   const formattedEbayRes = await scrapperEbay("Helios44-2");
   //const clHtml = await getClHtml("Takumar");
   //console.log(JSON.stringify(formattedEbayRes, null, 2));
-
-  const [{ title, price, shippingInfo, subTitle, link }] = formattedEbayRes;
-  const makeNewListing = () => {
+  mongoose.connection.collection("listings").deleteMany({});
+  const makeNewListing = ({ title, price, shippingInfo, subTitle, link }) => {
     Listing.count(
       {
         title: title,
@@ -37,13 +35,14 @@ app.get("/scrape", async (req, res, next) => {
             err ? console.log(err) : console.log(doc);
           });
         }
+
         console.log(err);
       }
     );
   };
-  /* formattedEbayRes.forEach((ele) => {
-    makeNewListing;
-  });*/
+  formattedEbayRes.forEach((ele) => {
+    makeNewListing(ele);
+  });
 
   // console.log("Cl Stuff", formattedClRes);
 });

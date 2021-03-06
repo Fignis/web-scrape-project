@@ -6,10 +6,12 @@ const listingSchema = new schema({
   title: {
     type: String,
     requried: true,
+    unique: false,
   },
   subtitle: {
     type: String,
     required: true,
+    unique: false,
   },
   price: {
     type: String,
