@@ -53,30 +53,37 @@ const formatResults = (data) => {
     "ul[class='srp-results srp-list clearfix']> li[class='s-item    s-item--watch-at-corner']"
   );
   const mapResults = results.map((index, ele) => {
-    // const elementselect = ;
-    return getEbayPrices($(ele));
+    const eleSelect = $(ele);
+    return getEbayPrices(eleSelect);
   });
 
   //after mapping the results to a new array.
   //get() gets the array from the cheerio object it extracts it.
-
-  return mapResults.get();
+  //this filters out all the blank entries without titles.
+  const filtrResults = mapResults.get().filter((result) => result.title !== "");
+  return filtrResults;
   // return cheerioConvertedRes;
 };
 
 const scrapperEbay = async (
   searchTerm,
-  newUrl = `https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1311&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_pgn=1`
+  newUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${searchTerm}&_sacat=0&_sop=15&rt=nc&LH_BIN=1&_pgn=1`
 ) => {
   //fetch data with inputed searchterm
   const htmlData = await getHtml(newUrl);
   //format the data
   const displayedResults = formatResults(htmlData);
-  const numberOfAllResults = +displayedResults.length;
+  // const numberOfAllResults = +displayedResults.length;
 
   //recursion:
   //when to stop the recursion
-  if (displayedResults.length < 1) {
+  /*A temporary fix I will limit the number of results 3/5/21 */
+
+  const numberOfCurrentPg = parseInt(newUrl.match(/pgn=(\d+)$/)[1], 10);
+  if (numberOfCurrentPg === 3) {
+    /*----update 3/5/21 ----*/
+    //to limit number of results I've implemented a page cap because it does not make sense to get all the results from a search for this project.
+
     //if the number of results on page is equal to 0 stop and return displayedResults
     console.log(`inital/terminate: ${displayedResults.length}`);
     return displayedResults;
@@ -84,7 +91,7 @@ const scrapperEbay = async (
     //cut the page number off the link and convert to an int
     const numberOfNextPage = parseInt(newUrl.match(/pgn=(\d+)$/)[1], 10) + 1;
     //make a new link with the new page number
-    const nextPage = `https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1311&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_pgn=${numberOfNextPage}`;
+    const nextPage = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${searchTerm}&_sacat=0&_sop=15&rt=nc&LH_BIN=1&_pgn=${numberOfNextPage}`;
     //add the next page results to current page results.
     const combinedRes = displayedResults.concat(
       await scrapperEbay(searchTerm, nextPage)

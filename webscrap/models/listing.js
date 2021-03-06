@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const schema = mongoose.Schema;
 
 const listingSchema = new schema({
-  _id: schema.Types.ObjectId,
   title: {
     type: String,
     requried: true,
@@ -13,7 +12,7 @@ const listingSchema = new schema({
     required: true,
   },
   price: {
-    type: Number,
+    type: String,
     required: true,
   },
   shippingInfo: {
