@@ -10,7 +10,7 @@ A full stack project that will scrape listings data from various sites like Ebay
  2. Backend(Mongodb,express)
     * [x] Make a database.
     * [x] Connect the database.
-    * [ ] Figure out how to send scrapped data to this database (paritally complete)
+    * [x] Figure out how to send scrapped data to this database.
  3. Frontend(Reactjs)
     * [ ] Create a search component.
     * [ ] Create a listings component.
