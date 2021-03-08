@@ -11,6 +11,8 @@ A full stack project that will scrape listings data from various sites like Ebay
     * [x] Make a database.
     * [x] Connect the database.
     * [x] Figure out how to send scrapped data to this database.
+    * * [ ] Save cheapest listing to another collection.
+    * * [ ] Setup a cron job.
  3. Frontend(Reactjs)
     * [ ] Create a search component.
     * [ ] Create a listings component.
