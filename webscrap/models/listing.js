@@ -26,6 +26,10 @@ const listingSchema = new schema({
     required: true,
     unique: true,
   },
+  imgLink: {
+    type: String,
+    required: true,
+  },
 });
 var Listing = mongoose.model("listing", listingSchema);
 export { Listing };

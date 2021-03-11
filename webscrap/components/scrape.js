@@ -42,8 +42,9 @@ const getEbayPrices = ($) => {
     .trim();
 
   const link = $.find("a[class='s-item__link']").attr("href").trim();
+  const imgLink = $.find("img[class='s-item__image-img']").attr("src").trim();
   //returns title of ebay listing, subtitle, shipping,price and the link
-  return { title, subTitle, price, shippingInfo, link };
+  return { title, subTitle, price, shippingInfo, link, imgLink };
 };
 const formatResults = (data) => {
   //this function formats the results, it maps each result on the search results
@@ -80,7 +81,7 @@ const scrapperEbay = async (
   /*A temporary fix I will limit the number of results 3/5/21 */
 
   const numberOfCurrentPg = parseInt(newUrl.match(/pgn=(\d+)$/)[1], 10);
-  if (numberOfCurrentPg >= 2) {
+  if (numberOfCurrentPg === 2) {
     /*----update 3/5/21 ----*/
     //to limit number of results I've implemented a page cap because it does not make sense to get all the results from a search for this project.
 

@@ -48,7 +48,14 @@ and executed continously in order to track the lowest price over time of that sa
   // this clears the collection first to save space.
   dbc.collection("listings").deleteMany({});
   //this function makes a new listing for every listing that is passed in.
-  const makeNewListing = ({ title, price, shippingInfo, subTitle, link }) => {
+  const makeNewListing = ({
+    title,
+    price,
+    shippingInfo,
+    subTitle,
+    link,
+    imgLink,
+  }) => {
     Listing.count(
       {
         title: title,
@@ -61,6 +68,7 @@ and executed continously in order to track the lowest price over time of that sa
             link: link,
             shippingInfo: shippingInfo,
             subtitle: subTitle,
+            imgLink: imgLink,
           });
 
           listing.save((err, doc) => {
