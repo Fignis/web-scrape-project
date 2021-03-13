@@ -6,7 +6,7 @@ const Products = () => {
     return (
         <Grid container spacing={3}>
             <Grid item xs={12} sm={4}>
-    <ProductListing title={}/>
+    <ProductListing />
     </Grid>
             <Grid item xs={12} sm={4}>
     <ProductListing/>
