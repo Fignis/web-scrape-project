@@ -3,13 +3,27 @@ import {InputBase,IconButton} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import Paper from '@material-ui/core/Paper';
+import axios from 'axios';
 const SearchBar =()=>{
     const [searchTerm,setSearchTerm] = useState("");
     const [ebayData,setEbayData]= useState([]);
- function updateSearchTerm (e){
+ const updateSearchTerm =(e)=>{
     e.preventDefault()
     setSearchTerm(e.target.value);
  }
+ const onSend = async(e)=>{
+   e.preventDefault()
+   const axiosCfg= {headers:{
+    'Content-Type':'application/json;charset=utf-8'
+   }}
+ try{
+   axios.post('/',{searchTerm},axiosCfg)
+ console.log("data sent");
+ }catch(err){
+   console.log({err});
+ }
+  };
+ 
  const useStyles = makeStyles((theme) => ({
     root: {
       padding: '2px 4px',
@@ -28,8 +42,8 @@ const SearchBar =()=>{
       color:'blue'
     }}))
     const classes = useStyles()
-    return(
-        <Paper component="form" className={classes.root}>
+    return( 
+            <Paper onSubmit={onSend} component="form" className={classes.root}>
               <InputBase
               variant="outlined"
         className={classes.input}
@@ -41,7 +55,10 @@ const SearchBar =()=>{
       <IconButton type="submit" className={classes.iconButton} aria-label="search">
         <SearchIcon />
       </IconButton>  
-        </Paper>
+      </Paper>
+
+    
+    
      )
 }
 export default SearchBar;

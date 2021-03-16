@@ -8,13 +8,17 @@ import { cheapListing } from "./models/cheapListing";
 
 require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
 const app = express();
-const port = process.env.PORT_NUM || 7640;
+const port = process.env.PORT_NUM || 3333;
+
 app.use(express.json());
 app.use(cors());
+// app.use(express.urlencoded({extended:true}))
+
+
+
 //this gets executed when the user gets to the endpoint of /scrape
 app.get("/scrape", async () => {
-  const formattedEbayRes = await scrapperEbay("Helios44-2");
-
+  const formattedEbayRes = await scrapperEbay("Takumar");
   const dbc = mongoose.connection;
   /* NOTES 3/8/21
 getting first document from listing collection and saving to another collection to
@@ -31,6 +35,7 @@ and executed continously in order to track the lowest price over time of that sa
     link: firstDoc.link,
     shippingInfo: firstDoc.link,
   });
+ 
   //saves the first listing which is the lowest priced one;
   /*doesnt work for now 
   const getFirstListing = (firstDoc) => {
@@ -46,8 +51,10 @@ and executed continously in order to track the lowest price over time of that sa
 */
 
   // this clears the collection first to save space.
-  dbc.collection("listings").deleteMany({});
+ dbc.collection("listings").deleteMany({});
+
   //this function makes a new listing for every listing that is passed in.
+ 
   const makeNewListing = ({
     title,
     price,
@@ -62,6 +69,7 @@ and executed continously in order to track the lowest price over time of that sa
       },
       (err, test) => {
         if (test === 0) {
+         
           let listing = new Listing({
             title: title,
             price: price,
@@ -70,7 +78,7 @@ and executed continously in order to track the lowest price over time of that sa
             subtitle: subTitle,
             imgLink: imgLink,
           });
-
+         
           listing.save((err, doc) => {
             err ? console.log(err) : console.log(doc);
           });
@@ -84,12 +92,18 @@ and executed continously in order to track the lowest price over time of that sa
   elements left in the formattedEbayResults array.
   */
   formattedEbayRes.forEach((ele) => {
-    makeNewListing(ele);
+    makeNewListing(ele);  
   });
 
   // console.log("Cl Stuff", formattedClRes);
 });
-
+app.post('/', (req,res)=>{
+  const {searchTerm}=  req.body;
+   const stringSearchTerm =searchTerm;
+ console.log(stringSearchTerm);
+   userSearchTerm = stringSearchTerm;
+    })
+let userSearchTerm = '';
 //this starts up the db on a specific port.
 mongoose.connect(
   process.env.DB_ACCESS,

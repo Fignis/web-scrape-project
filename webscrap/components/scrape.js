@@ -9,7 +9,7 @@ const getHtml = async (url) => {
         "User-Agent": "Node.js",
       },
     });
-
+    
     return data;
   } catch (err) {
     console.log(err.response);
@@ -50,30 +50,36 @@ const formatResults = (data) => {
   //this function formats the results, it maps each result on the search results
   //to the getEbayPrices function which gets all the info we want.
   const $ = cheerio.load(data);
+  
   const results = $(
-    "ul[class='srp-results srp-list clearfix']> li[class='s-item    s-item--watch-at-corner']"
+    "ul[class='srp-results srp-list clearfix']>li[class='s-item     s-item--watch-at-corner']"
   );
+ 
   const mapResults = results.map((index, ele) => {
     const eleSelect = $(ele);
     return getEbayPrices(eleSelect);
   });
+  
 
   //after mapping the results to a new array.
   //get() gets the array from the cheerio object it extracts it.
   //this filters out all the blank entries without titles.
   const filtrResults = mapResults.get().filter((result) => result.title !== "");
+
   return filtrResults;
   // return cheerioConvertedRes;
 };
 
 const scrapperEbay = async (
   searchTerm,
-  newUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${searchTerm}&_sacat=0&_sop=15&rt=nc&LH_BIN=1&_pgn=1`
+  newUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${searchTerm}&_sacat=0&LH_BIN=1&_sop=15&_pgn=1`
 ) => {
   //fetch data with inputed searchterm
   const htmlData = await getHtml(newUrl);
+
   //format the data
   const displayedResults = formatResults(htmlData);
+ 
   // const numberOfAllResults = +displayedResults.length;
 
   //recursion:
@@ -81,7 +87,8 @@ const scrapperEbay = async (
   /*A temporary fix I will limit the number of results 3/5/21 */
 
   const numberOfCurrentPg = parseInt(newUrl.match(/pgn=(\d+)$/)[1], 10);
-  if (numberOfCurrentPg === 2) {
+
+  if (numberOfCurrentPg == 3) {
     /*----update 3/5/21 ----*/
     //to limit number of results I've implemented a page cap because it does not make sense to get all the results from a search for this project.
 
@@ -92,13 +99,13 @@ const scrapperEbay = async (
     //cut the page number off the link and convert to an int
     const numberOfNextPage = parseInt(newUrl.match(/pgn=(\d+)$/)[1], 10) + 1;
     //make a new link with the new page number
-    const nextPage = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${searchTerm}&_sacat=0&_sop=15&rt=nc&LH_BIN=1&_pgn=${numberOfNextPage}`;
+    const nextPage = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${searchTerm}&_sacat=0&LH_BIN=1&_sop=15&_pgn=${numberOfNextPage}`;
     //add the next page results to current page results.
     const combinedRes = displayedResults.concat(
       await scrapperEbay(searchTerm, nextPage)
     );
     console.log(`scrapping: ${newUrl}`);
-
+    
     return combinedRes;
   }
 };
