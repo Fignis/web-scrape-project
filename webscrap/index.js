@@ -1,6 +1,6 @@
 import { scrapperEbay } from "./components/scrape";
 import express from "express";
-import cors from "cors";
+
 import { Listing } from "./models/listing";
 import mongoose from "mongoose";
 import path from "path";
@@ -11,14 +11,14 @@ const app = express();
 const port = process.env.PORT_NUM || 3333;
 
 app.use(express.json());
-app.use(cors());
-// app.use(express.urlencoded({extended:true}))
+
+app.use(express.urlencoded({extended:true}))
 
 
 
 //this gets executed when the user gets to the endpoint of /scrape
 app.get("/scrape", async () => {
-  const formattedEbayRes = await scrapperEbay("Takumar");
+  const formattedEbayRes = await scrapperEbay(userSearchTerm);
   const dbc = mongoose.connection;
   /* NOTES 3/8/21
 getting first document from listing collection and saving to another collection to
@@ -97,6 +97,7 @@ and executed continously in order to track the lowest price over time of that sa
 
   // console.log("Cl Stuff", formattedClRes);
 });
+//gets the searchterm from the frontend
 app.post('/', (req,res)=>{
   const {searchTerm}=  req.body;
    const stringSearchTerm =searchTerm;

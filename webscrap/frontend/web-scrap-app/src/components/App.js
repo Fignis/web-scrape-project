@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import {Grid} from '@material-ui/core';
 import Products from './Products';
 import NavBar from "./NavBar";
 import SearchBar from './SearchBar';
+
 const App = ()=>{
+  const [checkIfSent,setCheckIfSent]= useState(null);
+ const onSearched= (checkIfSent)=>{
+    setCheckIfSent(checkIfSent);
+  }
+  console.log(checkIfSent);
   return (
     <Grid container direction="column">
       <Grid item>
@@ -12,16 +18,16 @@ const App = ()=>{
       <Grid item container>
       <Grid item xs={false} sm={1} />
       <Grid item xs={8} >
-        <SearchBar/>
+        <SearchBar onSearched={onSearched }/>
       </Grid>
       <Grid item xs={false} sm={1} />
       </Grid>
      <Grid item container >
-       
+  
       <Grid item xs={false} sm={1} />
      
       <Grid item xs={8}>
- <Products/>
+ <Products searchDone= {checkIfSent}/>
      </Grid>
      <Grid item xs={false} sm={1}/>
     </Grid>
