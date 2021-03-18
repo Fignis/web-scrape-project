@@ -9,7 +9,7 @@ const App = ()=>{
  const onSearched= (checkIfSent)=>{
     setCheckIfSent(checkIfSent);
   }
-  console.log(checkIfSent);
+ 
   return (
     <Grid container direction="column">
       <Grid item>
@@ -27,7 +27,7 @@ const App = ()=>{
       <Grid item xs={false} sm={1} />
      
       <Grid item xs={8}>
- <Products searchDone= {checkIfSent}/>
+ <Products canRetrieve={checkIfSent} isRetrieved={onSearched} />
      </Grid>
      <Grid item xs={false} sm={1}/>
     </Grid>

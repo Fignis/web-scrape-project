@@ -27,7 +27,6 @@ this will be apart of a new function of the web app which allows the user to sav
 so if the user saves a search the first record in the listings collection will be saved
 and executed continously in order to track the lowest price over time of that saved item.
 */
-
   const firstDoc = Listing.findOne({});
   const cheapList = new cheapListing({
     title: firstDoc.title,
@@ -35,7 +34,7 @@ and executed continously in order to track the lowest price over time of that sa
     link: firstDoc.link,
     shippingInfo: firstDoc.link,
   });
- 
+
   //saves the first listing which is the lowest priced one;
   /*doesnt work for now 
   const getFirstListing = (firstDoc) => {
@@ -49,12 +48,9 @@ and executed continously in order to track the lowest price over time of that sa
     });
   };
 */
-
   // this clears the collection first to save space.
  dbc.collection("listings").deleteMany({});
-
   //this function makes a new listing for every listing that is passed in.
- 
   const makeNewListing = ({
     title,
     price,
@@ -83,7 +79,6 @@ and executed continously in order to track the lowest price over time of that sa
             err ? console.log(err) : console.log(doc);
           });
         }
-
         console.log(err);
       }
     );
@@ -94,17 +89,23 @@ and executed continously in order to track the lowest price over time of that sa
   formattedEbayRes.forEach((ele) => {
     makeNewListing(ele);  
   });
-
-  // console.log("Cl Stuff", formattedClRes);
+res.redirect('/data');
+  
 });
 //gets the searchterm from the frontend
-app.post('/', (req,res)=>{
+app.post('/st', (req,res)=>{
   const {searchTerm}=  req.body;
    const stringSearchTerm =searchTerm;
  console.log(stringSearchTerm);
    userSearchTerm = stringSearchTerm;
     })
 let userSearchTerm = '';
+//gets db data and sends to /data endpoint
+app.get('/data',(req,res)=>{
+Listing.find((err,data)=>{
+  err? res.send(err):res.send(data)
+})
+})
 //this starts up the db on a specific port.
 mongoose.connect(
   process.env.DB_ACCESS,

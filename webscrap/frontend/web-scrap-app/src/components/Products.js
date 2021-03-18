@@ -1,17 +1,15 @@
 import { Grid } from '@material-ui/core';
-import axios from 'axios';
-import React, { useState } from 'react';
+import React from 'react';
 import ProductListing from './ProductListing';
+import useSearchData from './useSearchData';
 
-const Products = ({searchDone}) => {
-        const [ebayData,setEbayData]= useState([]);
-        if (searchDone){
-        const getDbData = ()=>{
-                const {data}= axios.get('/scrape',(req,res)=>{
-                        
-                })
-        }
-}
+const Products = ({canRetrieve,isRetrieved}) => {
+    const ebayDataFromSearch = useSearchData(canRetrieve);
+    
+    isRetrieved(false);
+
+
+
     return (
         <Grid container spacing={3}>
             <Grid item xs={12} sm={4}>
