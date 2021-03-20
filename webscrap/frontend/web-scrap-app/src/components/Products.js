@@ -1,19 +1,33 @@
 import { Grid } from '@material-ui/core';
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import ProductListing from './ProductListing';
-import useSearchData from './useSearchData';
+// import useSearchData from './useSearchData';
+import axios from 'axios';
 
-const Products = ({canRetrieve,isRetrieved}) => {
-    const ebayDataFromSearch = useSearchData(canRetrieve);
+// const Products = ({canRetrieve,isRetrieved}) => {
+       const Products = ()=>{
+
+        const [ebayData,setEbayData] = useState([]);
+        useEffect(()=>{
+            const getEbayDbData= async()=> {
+                const { data } = await axios.get('/scrape', (res)=>{
+                    return res;
+                })
+                  
+                setEbayData(data);  
+            }
+            getEbayDbData();
+        },[ebayData])
+        console.log(ebayData);
     
-    isRetrieved(false);
-
-
-
+//         const ebayDataFromSearch =  useSearchData(canRetrieve);
+// console.log(ebayDataFromSearch);
+//  isRetrieved(false);
     return (
         <Grid container spacing={3}>
             <Grid item xs={12} sm={4}>
-    <ProductListing />
+    <ProductListing listings={ebayData} />
+    
     </Grid>
             <Grid item xs={12} sm={4}>
     <ProductListing/>
@@ -29,5 +43,5 @@ const Products = ({canRetrieve,isRetrieved}) => {
     </Grid>
     </Grid>
     )
-}
+    }
 export default Products;

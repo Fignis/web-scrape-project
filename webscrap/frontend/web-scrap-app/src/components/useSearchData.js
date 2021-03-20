@@ -1,18 +1,19 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const useSearchData=(searchDone)=>{
-const [ebayData,setEbayData] = useState(null);
-    if(searchDone){
-        (async() => {
-            const { data } = await axios.get('/data', (res) => {
-                return res;
-            }
-            );
-            setEbayData(data);
-        })();
+const [ebayData,setEbayData] = useState([]);
+    useEffect(()=>{
+        const getEbayDbData= async()=> {
+            const { data } = await axios.get('/data', (res)=>{
+                return res.json()
+            })
+            getEbayDbData();    
+            setEbayData(data);  
+        }
+        
+    },[searchDone])
         return(ebayData)
 }
     
-    }
 export default useSearchData;

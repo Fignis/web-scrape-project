@@ -18,7 +18,7 @@ const SearchBar =({onSearched})=>{
    }}
  try{
    axios.post('/st',{searchTerm},axiosCfg)
- console.log("data sent");
+ console.log("search term sent");
  onSearched(true);
  
  }catch(err){

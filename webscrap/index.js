@@ -17,7 +17,8 @@ app.use(express.urlencoded({extended:true}))
 
 
 //this gets executed when the user gets to the endpoint of /scrape
-app.get("/scrape", async () => {
+app.get("/scrape", async (response,req) => {
+  try{
   const formattedEbayRes = await scrapperEbay(userSearchTerm);
   const dbc = mongoose.connection;
   /* NOTES 3/8/21
@@ -89,7 +90,11 @@ and executed continously in order to track the lowest price over time of that sa
   formattedEbayRes.forEach((ele) => {
     makeNewListing(ele);  
   });
-res.redirect('/data');
+response.redirect('/data');
+}
+catch(err){
+  console.log(err);
+}
   
 });
 //gets the searchterm from the frontend
