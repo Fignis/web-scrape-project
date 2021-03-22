@@ -5,10 +5,10 @@ import NavBar from "./NavBar";
 import SearchBar from './SearchBar';
 
 const App = ()=>{
-//   const [checkIfSent,setCheckIfSent]= useState(false);
-//  const onSearched= (checkIfSent)=>{
-//     setCheckIfSent(checkIfSent);
-//   }
+ const [checkIfSent,setCheckIfSent]= useState(false);
+  const onSearched= (checkIfSent)=>{
+     setCheckIfSent(checkIfSent);
+   }
  
   return (
     <Grid container direction="column">
@@ -18,7 +18,7 @@ const App = ()=>{
       <Grid item container>
       <Grid item xs={false} sm={1} />
       <Grid item xs={8} >
-        <SearchBar /*onSearched={onSearched }*//>
+        <SearchBar onSearched={onSearched }/>
       </Grid>
       <Grid item xs={false} sm={1} />
       </Grid>
@@ -27,7 +27,7 @@ const App = ()=>{
       <Grid item xs={false} sm={1} />
      
       <Grid item xs={8}>
- {/* <Products canRetrieve={checkIfSent} isRetrieved={onSearched} /> */}
+  <Products canRetrieve={checkIfSent} /*isRetrieved={onSearched} */ /> 
  <Products/>
      </Grid>
      <Grid item xs={false} sm={1}/>

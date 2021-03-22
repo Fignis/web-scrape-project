@@ -1,6 +1,6 @@
 import { scrapperEbay } from "./components/scrape";
 import express from "express";
-
+import morgan from 'morgan';
 import { Listing } from "./models/listing";
 import mongoose from "mongoose";
 import path from "path";
@@ -11,13 +11,22 @@ const app = express();
 const port = process.env.PORT_NUM || 3333;
 
 app.use(express.json());
-
+app.use(morgan("tiny"));
 app.use(express.urlencoded({extended:true}))
 
+//gets the searchterm from the frontend
+app.post('/st', (req,res)=>{
+  const {searchTerm}=  req.body;
+   const stringSearchTerm =searchTerm;
+ console.log(stringSearchTerm);
+   userSearchTerm = stringSearchTerm;
 
+   
+    })
+let userSearchTerm = '';
 
 //this gets executed when the user gets to the endpoint of /scrape
-app.get("/scrape", async (response,req) => {
+app.get("/scrape", async (req,res) => {
   try{
   const formattedEbayRes = await scrapperEbay(userSearchTerm);
   const dbc = mongoose.connection;
@@ -28,13 +37,13 @@ this will be apart of a new function of the web app which allows the user to sav
 so if the user saves a search the first record in the listings collection will be saved
 and executed continously in order to track the lowest price over time of that saved item.
 */
-  const firstDoc = Listing.findOne({});
-  const cheapList = new cheapListing({
-    title: firstDoc.title,
-    price: firstDoc.price,
-    link: firstDoc.link,
-    shippingInfo: firstDoc.link,
-  });
+  // const firstDoc = Listing.findOne({});
+  // const cheapList = new cheapListing({
+  //   title: firstDoc.title,
+  //   price: firstDoc.price,
+  //   link: firstDoc.link,
+  //   shippingInfo: firstDoc.link,
+  // });
 
   //saves the first listing which is the lowest priced one;
   /*doesnt work for now 
@@ -90,25 +99,21 @@ and executed continously in order to track the lowest price over time of that sa
   formattedEbayRes.forEach((ele) => {
     makeNewListing(ele);  
   });
-response.redirect('/data');
-}
+
+ 
+  }
 catch(err){
   console.log(err);
 }
-  
+res.redirect('/data');
+
 });
-//gets the searchterm from the frontend
-app.post('/st', (req,res)=>{
-  const {searchTerm}=  req.body;
-   const stringSearchTerm =searchTerm;
- console.log(stringSearchTerm);
-   userSearchTerm = stringSearchTerm;
-    })
-let userSearchTerm = '';
+
 //gets db data and sends to /data endpoint
 app.get('/data',(req,res)=>{
 Listing.find((err,data)=>{
   err? res.send(err):res.send(data)
+  console.log(data);
 })
 })
 //this starts up the db on a specific port.

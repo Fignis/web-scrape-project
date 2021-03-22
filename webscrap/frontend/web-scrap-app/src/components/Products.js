@@ -5,8 +5,8 @@ import ProductListing from './ProductListing';
 import axios from 'axios';
 
 // const Products = ({canRetrieve,isRetrieved}) => {
-       const Products = ()=>{
-
+       const Products = ({canRetrieve})=>{
+   
         const [ebayData,setEbayData] = useState([]);
         useEffect(()=>{
             const getEbayDbData= async()=> {
@@ -17,7 +17,7 @@ import axios from 'axios';
                 setEbayData(data);  
             }
             getEbayDbData();
-        },[ebayData])
+        },[canRetrieve])
         console.log(ebayData);
     
 //         const ebayDataFromSearch =  useSearchData(canRetrieve);
