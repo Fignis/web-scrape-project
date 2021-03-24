@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
-import {makeStyles} from '@material-ui/core';
+import {CardMedia, makeStyles} from '@material-ui/core';
 import Card from '@material-ui/core/Card';
+import {Grid} from '@material-ui/core';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
@@ -18,35 +19,48 @@ const useStyles = makeStyles({
     pos: {
       marginBottom: 12,
     },
+    media:{
+      height:140
+    }
   });
-const ProductListing = ({listings})=> {
+const ProductListing = (props)=> {
   
   const classes = useStyles();
-if(listings){
-  const mappedListings = listings.map((ele)=>{
-    return {
-  title:ele.title,
-price:ele.price,
-shippingInfo:ele.shippingInfo
-   } 
+if(props.listings){
+  const mappedListings = props.listings.map((ele)=>{
+    return (
+      <Grid item xs={8} sm={4}>
+      <Card key={ele.id}>
+        <CardMedia component="img" className={classes.media}src={ele.imgLink}>
+
+        </CardMedia>
+      <CardContent>
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+        {ele.title}
+        </Typography>
+
+        <Typography variant="h5" component="h2">
+         
+        </Typography>
+        
+      </CardContent>
+      <CardActions>
+        <Button size="small">Learn More</Button>
+      </CardActions>
+    </Card>
+    </Grid>
+    )
+   
   })
-  return (
-  <Card>
+  return <Grid  spacing={3} container direction="row">{mappedListings}</Grid>;
+  
+}else{
+return (<Card>
   <CardContent>
-    <Typography className={classes.title} color="textSecondary" gutterBottom>
-    {mappedListings}
+    <Typography>
+      Please search for something...
     </Typography>
-    <Typography variant="h5" component="h2">
-     
-    </Typography>
-    
   </CardContent>
-  <CardActions>
-    <Button size="small">Learn More</Button>
-  </CardActions>
 </Card>)
-  }else {
-    return<div>Need to search</div>
-  }
-}
+} }
 export default ProductListing;

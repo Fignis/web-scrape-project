@@ -111,8 +111,9 @@ res.redirect('/data');
 
 //gets db data and sends to /data endpoint
 app.get('/data',(req,res)=>{
+
 Listing.find((err,data)=>{
-  err? res.send(err):res.send(data)
+  err? console.log(err):res.send(data)
   console.log(data);
 })
 })

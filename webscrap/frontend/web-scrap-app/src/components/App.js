@@ -6,7 +6,9 @@ import SearchBar from './SearchBar';
 
 const App = ()=>{
  const [checkIfSent,setCheckIfSent]= useState(false);
+
   const onSearched= (checkIfSent)=>{
+    console.log('change');
      setCheckIfSent(checkIfSent);
    }
  
@@ -27,7 +29,7 @@ const App = ()=>{
       <Grid item xs={false} sm={1} />
      
       <Grid item xs={8}>
-  <Products canRetrieve={checkIfSent} /*isRetrieved={onSearched} */ /> 
+  <Products canRetrieve={checkIfSent} isRetrieved={onSearched}  /> 
  <Products/>
      </Grid>
      <Grid item xs={false} sm={1}/>

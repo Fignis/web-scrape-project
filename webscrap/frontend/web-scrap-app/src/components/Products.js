@@ -4,10 +4,10 @@ import ProductListing from './ProductListing';
 // import useSearchData from './useSearchData';
 import axios from 'axios';
 
-// const Products = ({canRetrieve,isRetrieved}) => {
-       const Products = ({canRetrieve})=>{
-   
+const Products = ({canRetrieve,isRetrieved}) => {
+
         const [ebayData,setEbayData] = useState([]);
+       
         useEffect(()=>{
             const getEbayDbData= async()=> {
                 const { data } = await axios.get('/scrape', (res)=>{
@@ -17,31 +17,26 @@ import axios from 'axios';
                 setEbayData(data);  
             }
             getEbayDbData();
+            return ()=>{
+                console.log('cleanup')
+                isRetrieved(false)
+              
+            }
+            
         },[canRetrieve])
         console.log(ebayData);
-    
+      
 //         const ebayDataFromSearch =  useSearchData(canRetrieve);
 // console.log(ebayDataFromSearch);
 //  isRetrieved(false);
+
     return (
-        <Grid container spacing={3}>
-            <Grid item xs={12} sm={4}>
+       <Grid>
+       <Grid item direction='row'container xs={12}>    
     <ProductListing listings={ebayData} />
-    
     </Grid>
-            <Grid item xs={12} sm={4}>
-    <ProductListing/>
-    </Grid>
-            <Grid item xs={12} sm={4}>
-    <ProductListing/>
-    </Grid>
-            <Grid item xs={12} sm={4}>
-    <ProductListing/>
-    </Grid>
-            <Grid item xs={12} sm={4}>
-    <ProductListing/>
-    </Grid>
-    </Grid>
+</Grid>
+
     )
     }
 export default Products;
