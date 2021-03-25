@@ -1,12 +1,14 @@
 import React,{useState} from 'react';
 import {CardMedia, makeStyles} from '@material-ui/core';
+import {useTheme} from'@material-ui/styles';
 import Card from '@material-ui/core/Card';
 import {Grid} from '@material-ui/core';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-const useStyles = makeStyles({
+import { dark } from '@material-ui/core/styles/createPalette';
+const useStyles = makeStyles(theme=>({
    
     bullet: {
       display: 'inline-block',
@@ -20,32 +22,39 @@ const useStyles = makeStyles({
       marginBottom: 12,
     },
     media:{
-      height:140
+      height:240,
+    },
+    card:{
+      backgroundColor:'transparent',
+      color:theme.palette.common.dark,
+      height:'9vh'
     }
-  });
+  }));
+ 
 const ProductListing = (props)=> {
   
   const classes = useStyles();
+
 if(props.listings){
   const mappedListings = props.listings.map((ele)=>{
     return (
-      <Grid item xs={8} sm={4}>
+      <Grid component={Card} item xs={8} sm={4}>
       <Card key={ele.id}>
         <CardMedia component="img" className={classes.media}src={ele.imgLink}>
 
         </CardMedia>
-      <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
+      <CardContent className={classes.card}>
+        <Typography component='p' className={classes.title} color="textSecondary">
         {ele.title}
         </Typography>
 
-        <Typography variant="h5" component="h2">
-         
+        <Typography color="textPrimary"align="left"variant="h5" component="h2">
+         {ele.price}
         </Typography>
         
       </CardContent>
       <CardActions>
-        <Button size="small">Learn More</Button>
+     
       </CardActions>
     </Card>
     </Grid>
@@ -59,6 +68,7 @@ return (<Card>
   <CardContent>
     <Typography>
       Please search for something...
+     
     </Typography>
   </CardContent>
 </Card>)
