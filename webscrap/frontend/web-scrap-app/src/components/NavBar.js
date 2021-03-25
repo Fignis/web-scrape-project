@@ -12,7 +12,7 @@ const NavBar = ()=>{
     <AppBar position="static" color="primary">
     <Toolbar>
      <Typography className={classes.TypographyStyles}>
-        Scraper 
+        Price Scraper
      </Typography>
      <DonutLargeIcon/>
     </Toolbar>

@@ -13,7 +13,7 @@ const Products = ({canRetrieve,isRetrieved}) => {
                 const { data } = await axios.get('/scrape', (res)=>{
                     return res;
                 })
-                  
+            
                 setEbayData(data);  
             }
             getEbayDbData();

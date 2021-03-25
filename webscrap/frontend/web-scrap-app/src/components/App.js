@@ -1,16 +1,28 @@
-import React, { useState } from "react";
-import {Grid} from '@material-ui/core';
+import React, { useCallback, useState } from "react";
+import {Grid,CircularProgress} from '@material-ui/core';
 import Products from './Products';
 import NavBar from "./NavBar";
 import SearchBar from './SearchBar';
 
 const App = ()=>{
  const [checkIfSent,setCheckIfSent]= useState(false);
-
-  const onSearched= (checkIfSent)=>{
-    console.log('change');
+ const [loading, setLoading] = useState(false);
+ const onSearched= useCallback(
+  (checkIfSent)=>{
+    console.log(checkIfSent);
      setCheckIfSent(checkIfSent);
-   }
+  
+   },
+  [],
+)
+const onLoading = useCallback(
+    (isLoading)=>{
+      setLoading(isLoading)
+    }
+  ,
+  [],
+)
+  
  
   return (
     <Grid container direction="column">
@@ -20,7 +32,7 @@ const App = ()=>{
       <Grid item container>
       <Grid item xs={false} sm={1} />
       <Grid item xs={8} >
-        <SearchBar onSearched={onSearched }/>
+        <SearchBar loading={onLoading} onSearched={onSearched }/>
       </Grid>
       <Grid item xs={false} sm={1} />
       </Grid>
@@ -28,9 +40,8 @@ const App = ()=>{
   
       <Grid item xs={false} sm={1} />
      
-      <Grid item xs={8}>
-  <Products canRetrieve={checkIfSent} isRetrieved={onSearched}  /> 
- <Products/>
+      <Grid item xs={8}>    
+   <Products  loaded={loading}canRetrieve={checkIfSent} isRetrieved={onSearched}  /> 
      </Grid>
      <Grid item xs={false} sm={1}/>
     </Grid>

@@ -4,7 +4,7 @@ import {makeStyles} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
-const SearchBar =({onSearched})=>{
+const SearchBar =({loading,onSearched})=>{
     const [searchTerm,setSearchTerm] = useState("");
 
  const updateSearchTerm =(e)=>{
@@ -20,6 +20,7 @@ const SearchBar =({onSearched})=>{
    axios.post('/st',{searchTerm},axiosCfg)
  console.log("search term sent");
  onSearched(true);
+ loading(true);
  
  }catch(err){
    console.log({err});
