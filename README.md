@@ -5,7 +5,6 @@ A full stack project that will scrape listings data from various sites like Ebay
 ### Planned features
  1. Web Scrapping(Nodejs, Cheerio)
     * [x] Scrape ebay listings
-    * [ ] ~Scrape craigslist~(postponed till i figure out how to connect ebay scrape data first.) 
     * [x] get data from multiple pages (pagination)
  2. Backend(Mongodb,express)
     * [x] Make a database.
@@ -14,7 +13,7 @@ A full stack project that will scrape listings data from various sites like Ebay
     * * [ ] Save cheapest listing to another collection.
     * * [ ] Setup a cron job.
  3. Frontend(Reactjs)
-    * [ ] Create a search component.
+    * [x] Create a search component.
     * [ ] Create a listings component.
     * [ ] Implement hooks.
 
