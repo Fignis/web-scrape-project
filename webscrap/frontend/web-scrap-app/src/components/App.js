@@ -41,7 +41,7 @@ const onLoading = useCallback(
       <Grid item xs={false} sm={1} />
      
       <Grid item xs={8}>    
-   <Products  loaded={loading}canRetrieve={checkIfSent} isRetrieved={onSearched}  /> 
+   <Products  loaded={loading} loading={onLoading}canRetrieve={checkIfSent} isRetrieved={onSearched}  /> 
      </Grid>
      <Grid item xs={false} sm={1}/>
     </Grid>
