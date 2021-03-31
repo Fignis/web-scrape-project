@@ -52,7 +52,7 @@ const formatResults = (data) => {
   const $ = cheerio.load(data);
   
   const results = $(
-    "ul[class='srp-results srp-list clearfix']>li[class='s-item     s-item--watch-at-corner']"
+    "ul[class='srp-results srp-list clearfix']>li[class='s-item      s-item--watch-at-corner']"
   );
  
   const mapResults = results.map((index, ele) => {

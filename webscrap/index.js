@@ -15,7 +15,7 @@ app.use(morgan("tiny"));
 app.use(express.urlencoded({extended:true}))
 
 //gets the searchterm from the frontend
-app.post('/st', (req,res)=>{
+app.post('/api/st', (req,res)=>{
   const {searchTerm}=  req.body;
    const stringSearchTerm =searchTerm;
  console.log(stringSearchTerm);
@@ -26,7 +26,7 @@ app.post('/st', (req,res)=>{
 let userSearchTerm = '';
 
 //this gets executed when the user gets to the endpoint of /scrape
-app.get("/scrape", async (req,res) => {
+app.get("/api/scrape", async (req,res) => {
   try{
   const formattedEbayRes = await scrapperEbay(userSearchTerm);
   const dbc = mongoose.connection;
@@ -105,15 +105,15 @@ and executed continously in order to track the lowest price over time of that sa
 catch(err){
   console.log(err);
 }
-res.redirect('/data');
+res.redirect('/api/data');
 
 });
 
 //gets db data and sends to /data endpoint
-app.get('/data',(req,res)=>{
+app.get('/api/data',(req,res)=>{
 
 Listing.find((err,data)=>{
-  err? console.log(err):res.send(data)
+  err? res.send(err):res.send(data)
   console.log(data);
 })
 })

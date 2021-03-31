@@ -8,7 +8,7 @@ const Products = ({loaded,loading, canRetrieve,isRetrieved}) => {
 
         const [ebayData,setEbayData] = useState([]);
         const getEbayDbData= async()=> {
-            const { data } = await axios.get('/scrape')
+            const { data } = await axios.get('/api/scrape')
             setEbayData(data); 
             loading(false)
            
@@ -22,7 +22,7 @@ const Products = ({loaded,loading, canRetrieve,isRetrieved}) => {
               
             }
             
-        },[canRetrieve])
+        },[canRetrieve,isRetrieved])
         console.log(ebayData);
       
 //         const ebayDataFromSearch =  useSearchData(canRetrieve);

@@ -17,7 +17,7 @@ const SearchBar =({loading,onSearched})=>{
     'Content-Type':'application/json;charset=utf-8'
    }}
  try{
-   axios.post('/st',{searchTerm},axiosCfg)
+   axios.post('/api/st',{searchTerm},axiosCfg)
  console.log("search term sent");
  onSearched(true);
  loading(true);

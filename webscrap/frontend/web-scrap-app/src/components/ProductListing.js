@@ -44,8 +44,8 @@ const ProductListing = (props)=> {
     return (  
       <Grid   component={Card} item xs={8} sm={4}>
         <Grow in>
-      <Card key={ele.id}>
-      <CardActionArea>
+      <Card  key={ele._id}>
+      <CardActionArea >
         <CardMedia component="img" className={classes.media}src={ele.imgLink}>
 
         </CardMedia>
@@ -58,9 +58,10 @@ const ProductListing = (props)=> {
         <Typography color="textPrimary"align="left"variant="h5" component="h2">
          {ele.price}
         </Typography>
-        <Typography color="textSecondary" variant="p" component="p">
+        <Typography color="textSecondary" component="p">
         {ele.shippingInfo}
         </Typography>
+      
       </CardContent>
     
 
