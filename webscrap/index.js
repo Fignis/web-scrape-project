@@ -96,7 +96,7 @@ and executed continously in order to track the lowest price over time of that sa
   /*this loop ensures that the function executes itself over and over until there are no
   elements left in the formattedEbayResults array.
   */
-  formattedEbayRes.forEach((ele) => {
+   formattedEbayRes.forEach((ele) => {
     makeNewListing(ele);  
   });
 
@@ -110,12 +110,15 @@ res.redirect('/api/data');
 });
 
 //gets db data and sends to /data endpoint
-app.get('/api/data',(req,res)=>{
+app.get('/api/data', (req,res)=>{
 
-Listing.find((err,data)=>{
+Listing.find().sort({price:1}).exec((err,data)=>{
   err? res.send(err):res.send(data)
   console.log(data);
 })
+
+  
+
 })
 //this starts up the db on a specific port.
 mongoose.connect(

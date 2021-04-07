@@ -9,7 +9,7 @@ const getHtml = async (url) => {
         "User-Agent": "Node.js",
       },
     });
-    
+
     return data;
   } catch (err) {
     console.log(err.response);
@@ -50,16 +50,15 @@ const formatResults = (data) => {
   //this function formats the results, it maps each result on the search results
   //to the getEbayPrices function which gets all the info we want.
   const $ = cheerio.load(data);
-  
+
   const results = $(
     "ul[class='srp-results srp-list clearfix']>li[class='s-item      s-item--watch-at-corner']"
   );
- 
+
   const mapResults = results.map((index, ele) => {
     const eleSelect = $(ele);
     return getEbayPrices(eleSelect);
   });
-  
 
   //after mapping the results to a new array.
   //get() gets the array from the cheerio object it extracts it.
@@ -79,7 +78,7 @@ const scrapperEbay = async (
 
   //format the data
   const displayedResults = formatResults(htmlData);
- 
+
   // const numberOfAllResults = +displayedResults.length;
 
   //recursion:
@@ -105,7 +104,7 @@ const scrapperEbay = async (
       await scrapperEbay(searchTerm, nextPage)
     );
     console.log(`scrapping: ${newUrl}`);
-    
+
     return combinedRes;
   }
 };
@@ -147,4 +146,35 @@ const formatCl = (data) => {
   return mappedClRes.get();
 };
 */
+
+/*Etsy*/
+const etsyScraper = async (
+  searchTerm,
+  url = `https://www.etsy.com/search?q=${searchTerm}&page=1&ref=pagination`
+) => {
+  const etsyHtml = getHtml(url);
+
+  const etsyResults = formatEtsyRes(etsyHtml);
+};
+
+const formatEtsyRes = (data) => {};
+const getEtsyPrices = ($) => {
+  const etsyTitle = $.find(
+    "h3[class='wt-mb-xs-0 wt-text-truncate wt-text-caption']"
+  )
+    .text()
+    .trim();
+  const etsyPrice = $.find("p[class='wt-text-title-01']").text().trim();
+  const etsyShipping = $.find(
+    "span[class='wt-badge wt-badge--small wt-badge--sale-01']"
+  )
+    .text()
+    .trim();
+  const etsyLink = $.find("a[class='listing-link']").attr("href").trim();
+  const etsyImgLink = $.find(
+    'img[class="wt-width-full wt-height-full wt-display-block wt-position-absolute loaded"]'
+  )
+    .attr("src")
+    .trim();
+};
 export { scrapperEbay /*formatCl, getClHtml*/ };
