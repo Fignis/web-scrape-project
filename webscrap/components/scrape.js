@@ -153,11 +153,21 @@ const etsyScraper = async (
   url = `https://www.etsy.com/search?q=${searchTerm}&page=1&ref=pagination`
 ) => {
   const etsyHtml = getHtml(url);
-
   const etsyResults = formatEtsyRes(etsyHtml);
 };
 
-const formatEtsyRes = (data) => {};
+const formatEtsyRes = (data) => {
+  const $ = cheerio.load(data);
+  const etsyResults = $(
+    'ul[class="wt-grid wt-grid--block wt-pl-xs-0 tab-reorder-container"]'
+  );
+  const mapEtsyResults = etsyResults.map((listing) => {
+    const selListing = $(listing);
+    return getEtsyPrices(selListing);
+  });
+  return mapEtsyResults.get();
+};
+
 const getEtsyPrices = ($) => {
   const etsyTitle = $.find(
     "h3[class='wt-mb-xs-0 wt-text-truncate wt-text-caption']"
@@ -176,5 +186,7 @@ const getEtsyPrices = ($) => {
   )
     .attr("src")
     .trim();
+
+  return { etsyTitle, etsyPrice, etsyShipping, etsyLink, etsyImgLink };
 };
 export { scrapperEbay /*formatCl, getClHtml*/ };
