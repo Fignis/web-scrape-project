@@ -6,16 +6,19 @@ A full stack project that will scrape listings data from various sites like Ebay
  1. Web Scrapping(Nodejs, Cheerio)
     * [x] Scrape ebay listings
     * [x] get data from multiple pages (pagination)
+    * [ ] Get Etsy data.
  2. Backend(Mongodb,express)
     * [x] Make a database.
     * [x] Connect the database.
     * [x] Figure out how to send scrapped data to this database.
-    * * [ ] Save cheapest listing to another collection.
-    * * [ ] Setup a cron job.
+    * [ ] Send etsy data to the database
+   
  3. Frontend(Reactjs)
     * [x] Create a search component.
-    * [ ] Create a listings component.
-    * [ ] Implement hooks.
+    * [x] Create a listings component.
+    * * [x] Display Ebay Listings 
+    * * [ ] Display Etsy listings
+    * [x] Implement hooks.
 
 ### Updates
 - 2/21/21 Added Ebay scrapping.
@@ -25,6 +28,7 @@ A full stack project that will scrape listings data from various sites like Ebay
 - 3/6/21  Successfully connected the database to web scrapped data!
 - 3/16/21 Connected SearchBar Component to database.
 - 3/24/21 Listings display data pulled from db.
+- 4/07/21 Started work on implementing etsy results.
 ### Dependencies
 - [cheerio.js](https://cheerio.js.org/) Parses html data and extracts data.
 - [axios](https://www.npmjs.com/package/axios) Promise based HTTP client for the browser and node.js.
