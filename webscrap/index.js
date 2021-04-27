@@ -5,6 +5,7 @@ import { Listing } from "./models/listing";
 import mongoose from "mongoose";
 import path from "path";
 import { cheapListing } from "./models/cheapListing";
+import {etsyListing} from './models/etsyListing';
 
 require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
 const app = express();
@@ -20,8 +21,6 @@ app.post('/api/st', (req,res)=>{
    const stringSearchTerm =searchTerm;
  console.log(stringSearchTerm);
    userSearchTerm = stringSearchTerm;
-
-   
     })
 let userSearchTerm = '';
 
@@ -29,6 +28,7 @@ let userSearchTerm = '';
 app.get("/api/scrape", async (req,res) => {
   try{
   const formattedEbayRes = await scrapperEbay(userSearchTerm);
+  const formattedEtsyRes = await etsyScraper(userSearchTerm);
   const dbc = mongoose.connection;
   /* NOTES 3/8/21
 getting first document from listing collection and saving to another collection to
