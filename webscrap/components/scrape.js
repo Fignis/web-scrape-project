@@ -81,10 +81,6 @@ const scrapperEbay = async (
 
   // const numberOfAllResults = +displayedResults.length;
 
-  //recursion:
-  //when to stop the recursion
-  /*A temporary fix I will limit the number of results 3/5/21 */
-
   const numberOfCurrentPg = parseInt(newUrl.match(/pgn=(\d+)$/)[1], 10);
 
   if (numberOfCurrentPg == 3) {
@@ -154,6 +150,17 @@ const etsyScraper = async (
 ) => {
   const etsyHtml = getHtml(url);
   const etsyResults = formatEtsyRes(etsyHtml);
+  const etsyCurrPage = parseInt(url.match(/page=(\d+)$/)[1], 10);
+  if (etsyCurrPage === 3) {
+    return etsyResults;
+  } else {
+    const etsyNextPageNum = parseInt(url.match(/page=(\d+)$/)[1], 10) + 1;
+    const etsyNextPage = `https://www.etsy.com/search?q=${searchTerm}&page=${etsyNextPageNum}&ref=pagination`;
+    const combinedEtsyResults = etsyResults.concat(
+      await etsyScraper(searchTerm, etsyNextPage)
+    );
+    return combinedEtsyResults;
+  }
 };
 
 const formatEtsyRes = (data) => {
