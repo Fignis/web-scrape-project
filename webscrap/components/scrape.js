@@ -196,4 +196,4 @@ const getEtsyPrices = ($) => {
 
   return { etsyTitle, etsyPrice, etsyShipping, etsyLink, etsyImgLink };
 };
-export { scrapperEbay /*formatCl, getClHtml*/ };
+export { scrapperEbay, etsyScraper /*formatCl, getClHtml*/ };

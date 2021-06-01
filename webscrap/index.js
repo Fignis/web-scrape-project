@@ -4,8 +4,9 @@ import morgan from "morgan";
 import { Listing } from "./models/listing";
 import mongoose from "mongoose";
 import path from "path";
+import { etsyScraper } from "./components/scrape";
 import { cheapListing } from "./models/cheapListing";
-import { etsyListing, etsyListing } from "./models/etsyListing";
+import { etsyListing } from "./models/etsyListing";
 
 require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
 const app = express();
