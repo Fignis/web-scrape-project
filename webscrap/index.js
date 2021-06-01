@@ -28,8 +28,15 @@ let userSearchTerm = "";
 //this gets executed when the user gets to the endpoint of /scrape
 app.get("/api/scrape", async (req, res) => {
   try {
-    const formattedEbayRes = await scrapperEbay(userSearchTerm);
-    const formattedEtsyRes = await etsyScraper(userSearchTerm);
+    const [ebayData, etsyData] = await Promise.all([
+      scrapperEbay(userSearchTerm),
+      etsyScraper(userSearchTerm),
+    ]);
+    console.log(ebayData);
+    // const formattedEbayRes = await scrapperEbay(userSearchTerm);
+    const formattedEbayRes = ebayData;
+    // const formattedEtsyRes = await etsyScraper(userSearchTerm);
+    const formattedEtsyRes = etsyData;
     const dbc = mongoose.connection;
 
     /* NOTES 3/8/21
@@ -131,20 +138,16 @@ and executed continously in order to track the lowest price over time of that sa
 });
 
 //gets db data and sends to /data endpoint
-app.get("/api/data", (req, res) => {
-  Listing.find()
-    .sort({ price: 1 })
-    .exec((err, data) => {
-      err ? res.send(err) : res.send(data);
-      console.log(data);
-    });
-  etsyListing
-    .find()
-    .sort({ price: 1 })
-    .exec((err, data) => {
-      err ? res.send(err) : res.send(data);
-      console.log(data);
-    });
+app.get("/api/data", async (req, res) => {
+  try {
+    const ebayListData = await Listing.find().sort({ price: 1 }).exec();
+
+    const etsyListData = await etsyListing.find().sort({ price: 1 }).exec();
+
+    res.send([ebayListData, etsyListData]);
+  } catch (err) {
+    console.log(err);
+  }
 });
 //this starts up the db on a specific port.
 mongoose.connect(
