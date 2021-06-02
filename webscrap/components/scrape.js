@@ -71,7 +71,7 @@ const formatResults = (data) => {
 
 const scrapperEbay = async (
   searchTerm,
-  newUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${searchTerm}&_sacat=0&LH_BIN=1&_sop=15&_pgn=1`
+  newUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_sop=15&LH_BIN=1&_pgn=1`
 ) => {
   //fetch data with inputed searchterm
   const htmlData = await getHtml(newUrl);
@@ -94,7 +94,7 @@ const scrapperEbay = async (
     //cut the page number off the link and convert to an int
     const numberOfNextPage = parseInt(newUrl.match(/pgn=(\d+)$/)[1], 10) + 1;
     //make a new link with the new page number
-    const nextPage = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${searchTerm}&_sacat=0&LH_BIN=1&_sop=15&_pgn=${numberOfNextPage}`;
+    const nextPage = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${searchTerm}&_sacat=0&LH_TitleDesc=0&_sop=15&LH_BIN=1&_pgn=${numberOfNextPage}`;
     //add the next page results to current page results.
     const combinedRes = displayedResults.concat(
       await scrapperEbay(searchTerm, nextPage)
@@ -148,7 +148,8 @@ const etsyScraper = async (
   searchTerm,
   url = `https://www.etsy.com/search?q=${searchTerm}&page=1&ref=pagination`
 ) => {
-  const etsyHtml = getHtml(url);
+  const etsyHtml = await getHtml(url);
+
   const etsyResults = formatEtsyRes(etsyHtml);
   const etsyCurrPage = parseInt(url.match(/page=(\d+)$/)[1], 10);
   if (etsyCurrPage === 3) {
@@ -159,6 +160,7 @@ const etsyScraper = async (
     const combinedEtsyResults = etsyResults.concat(
       await etsyScraper(searchTerm, etsyNextPage)
     );
+
     return combinedEtsyResults;
   }
 };
@@ -166,12 +168,14 @@ const etsyScraper = async (
 const formatEtsyRes = (data) => {
   const $ = cheerio.load(data);
   const etsyResults = $(
-    'ul[class="wt-grid wt-grid--block wt-pl-xs-0 tab-reorder-container"]'
+    'ul[class="wt-grid wt-grid--block wt-pl-xs-0 tab-reorder-container"]> li'
   );
+
   const mapEtsyResults = etsyResults.map((listing) => {
     const selListing = $(listing);
     return getEtsyPrices(selListing);
   });
+  console.log(mapEtsyResults.get());
   return mapEtsyResults.get();
 };
 
@@ -187,7 +191,12 @@ const getEtsyPrices = ($) => {
   )
     .text()
     .trim();
-  const etsyLink = $.find("a[class='listing-link']").attr("href").trim();
+  const etsyLink = $.find(
+    "a[class='listing-link             wt-display-inline-block                              organic-impression  logged']"
+  )
+    .attr("href")
+    .trim();
+  console.log(etsyLink);
   const etsyImgLink = $.find(
     'img[class="wt-width-full wt-height-full wt-display-block wt-position-absolute loaded"]'
   )

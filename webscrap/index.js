@@ -13,7 +13,7 @@ const app = express();
 const port = process.env.PORT_NUM || 3333;
 
 app.use(express.json());
-app.use(morgan("tiny"));
+app.use(morgan("common"));
 app.use(express.urlencoded({ extended: true }));
 
 //gets the searchterm from the frontend
