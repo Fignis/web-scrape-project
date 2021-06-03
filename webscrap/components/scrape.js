@@ -151,6 +151,7 @@ const etsyScraper = async (
   const etsyHtml = await getHtml(url);
 
   const etsyResults = formatEtsyRes(etsyHtml);
+  console.log(etsyResults);
   const etsyCurrPage = parseInt(url.match(/page=(\d+)$/)[1], 10);
   if (etsyCurrPage === 3) {
     return etsyResults;
@@ -165,8 +166,8 @@ const etsyScraper = async (
   }
 };
 
-const formatEtsyRes = (data) => {
-  const $ = cheerio.load(data);
+const formatEtsyRes = (etsyHtmlData) => {
+  const $ = cheerio.load(etsyHtmlData);
   const etsyResults = $(
     'ul[class="wt-grid wt-grid--block wt-pl-xs-0 tab-reorder-container"]> li'
   );
@@ -175,7 +176,7 @@ const formatEtsyRes = (data) => {
     const selListing = $(listing);
     return getEtsyPrices(selListing);
   });
-  console.log(mapEtsyResults.get());
+
   return mapEtsyResults.get();
 };
 
@@ -191,11 +192,7 @@ const getEtsyPrices = ($) => {
   )
     .text()
     .trim();
-  const etsyLink = $.find(
-    "a[class='listing-link             wt-display-inline-block                              organic-impression  logged']"
-  )
-    .attr("href")
-    .trim();
+  const etsyLink = $.find("a").attr("data-palette-listing-image href").trim();
   console.log(etsyLink);
   const etsyImgLink = $.find(
     'img[class="wt-width-full wt-height-full wt-display-block wt-position-absolute loaded"]'
